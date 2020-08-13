@@ -1,11 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+// import './App.css';
+import Greet from "./Greet";
+import ProductList from "./ProductList"
+import ProjectList from "./Assignment2/ProjectList"
 
 function App() {
+  // console.log("list = ", productList);
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <Greet name={"Dev"} surname={"Prad"}/> */}
+      <ProjectList />
+      {/* {productList.map((product) => <h5>{product.name}</h5>)} */}
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -18,7 +25,8 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      <a href></a>
     </div>
   );
 }
