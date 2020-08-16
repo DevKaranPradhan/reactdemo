@@ -1,29 +1,17 @@
 import React from 'react';
 import { Form, FormGroup, FormFeedback, Button, Card, CardBody, Container, Col, Row, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Alert } from 'reactstrap';
 
-const LoginComponent = ({username, password, setUsername, setPassword, 
-    logValues, schema, validateData, usernameError, passwordError}) => {
+const LoginComponent = ({ validateData, state, dispatch }) => {
+    const {username, password, usernameError, passwordError} = state
+    
     const setUsernameWrapper = (evt) => {
-        setUsername(evt.target.value);
+        dispatch({type: 'field', field: 'username', value: evt.target.value});
     }
     const setPasswordWrapper = (evt) => {
-        setPassword(evt.target.value);
+        dispatch({type: 'field', field: 'password', value: evt.target.value});
     }
-    let errors, arr=[]
-    const findErrors = () => {
-        schema
-            .validate({username, password}, {abortEarly: false})
-            .catch((err) => {
-                errors = err.errors;
-                errors.map((error) => {
-                    // arr.push(<Alert color="danger">{error}</Alert>)
-                    console.log(error);
-                });
-            });
-            
-    }
+
     return (
         <Container>
             <Row>
@@ -41,10 +29,8 @@ const LoginComponent = ({username, password, setUsername, setPassword,
                                 <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" value={password} onChange={setPasswordWrapper} invalid={(passwordError !== null) ? true : false } />
                                 <FormFeedback>{passwordError}</FormFeedback>
                             </FormGroup>
-                            {/* {errors && <Alert color="danger">{errors}</Alert>} */}
                             <Button onClick={() => {
                                 // logValues(); 
-                                // schema.validate({username: username, password: password}, {abortEarly: false});
                                 validateData();
                             }}>
                                 Login

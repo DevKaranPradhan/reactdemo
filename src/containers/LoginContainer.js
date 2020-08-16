@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import LoginComponent from '../components/LoginComponent';
 import * as yup from "yup";
 import apiHelper from '../apis/apiHelper'
+import loginReducer from '../reducers/loginReducer'
+
+const initialState = {
+    username: '',
+    password: '',
+    usernameError: null,
+    passwordError: null
+}
 
 const LoginContainer = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [usernameError, setUsernameError] = useState(null)
-    const [passwordError, setPasswordError] = useState(null)
+    const [state, dispatch] = useReducer(loginReducer, initialState)
+
+    let {username, password, usernameError, passwordError} = state
 
     const logValues = () => {
         console.log(username)
@@ -17,34 +24,28 @@ const LoginContainer = () => {
     const schema = yup.object().shape({
         username: yup.string().email().required(),
         password: yup.string().min(8).required(),
-      });
+    });
     
     const validateData = () => {
+        dispatch({type: 'reset-errors'});
         schema.validate({username, password}, { abortEarly: false })
         .then(() => {
-            apiHelper('post', 'https://api.taiga.io/api/v1/auth', {username, password, type: "normal"}).then((response) => {
-                console.log('response: ', response);
+            apiHelper('post', 'https://api.taiga.io/api/v1/auth', {username, password, type: 'normal'}).then((response) => {
+                console.log(response)
             })
         })
         .catch((err) => {
             err.inner.forEach((ele) => {
-            if (ele.path === 'username') setUsernameError(ele.message);
-            if (ele.path === 'password') setPasswordError(ele.message);
+                dispatch({type: 'field', field: `${ele.path}Error`, value: ele.message});
             });
-          });
+        });
     }
 
     return(
-        <LoginComponent 
-        username={username} 
-        password={password} 
-        setUsername={setUsername} 
-        setPassword={setPassword} 
-        logValues={logValues} 
-        schema={schema} 
-        validateData={validateData} 
-        usernameError={usernameError} 
-        passwordError={passwordError}
+        <LoginComponent
+            validateData={validateData} 
+            state={state}
+            dispatch={dispatch}
         />
     )
 }
