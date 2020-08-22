@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProjectRow from "../components/ProjectRow";
 import { useSelector, useDispatch } from "react-redux";
 import { getProjects } from "../actions/projectActions";
 
 let ProjectListContainer = () => {
   const dispatch = useDispatch();
-  dispatch(getProjects());
+  useEffect(() => { dispatch(getProjects()); }, []) 
 
   const { projectList } = useSelector((state) => state.projectsReducer);
   let arr = [];

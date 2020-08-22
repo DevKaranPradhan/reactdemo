@@ -6,7 +6,6 @@ import login from "../apis/loginApi";
 //worker saga
 function* loginSaga(action) {
   try {
-    console.log(action);
     const { data } = yield call(login, action.value);
     yield put(setUserDetails(data));
   } catch (error) {

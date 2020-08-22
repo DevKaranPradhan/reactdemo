@@ -6,7 +6,6 @@ import ProjectListContainer from "./ProjectListContainer";
 
 const DashboardContainer = () => {
   const { userDetails } = useSelector((state) => state.loginReducer);
-  console.log("data", userDetails);
   return (
     <>
       <DashboardComponent userDetails={userDetails} />
