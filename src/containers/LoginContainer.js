@@ -1,53 +1,67 @@
-import React, { useReducer } from 'react';
-import LoginComponent from '../components/LoginComponent';
+import React, { useReducer } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import apiHelper from '../apis/apiHelper'
-import loginReducer from '../reducers/loginReducer'
+import { Redirect } from "react-router-dom";
 
-const initialState = {
-    username: '',
-    password: '',
-    usernameError: null,
-    passwordError: null
-}
+import LoginComponent from "../components/LoginComponent";
+import apiHelper from "../apis/apiHelper";
+import login from "../apis/loginApi";
+import loginReducer, { initialState } from "../reducers/loginReducer";
+import { LOGIN_REDUCER } from "../shared/actionConstants";
+import {
+  setUserDetails,
+  loginRequest,
+  setErrors,
+  resetErrors,
+} from "../actions/loginActions";
 
 const LoginContainer = () => {
-    const [state, dispatch] = useReducer(loginReducer, initialState)
+  const dispatch = useDispatch();
+  const result = useSelector((state) => state.loginReducer);
+  const {
+    username,
+    password,
+    usernameError,
+    passwordError,
+    userDetails,
+  } = result;
 
-    let {username, password, usernameError, passwordError} = state
+  const schema = yup.object().shape({
+    username: yup.string().email().required(),
+    password: yup.string().min(8).required(),
+  });
 
-    const logValues = () => {
-        console.log(username)
-        console.log(password)
-    }
-
-    const schema = yup.object().shape({
-        username: yup.string().email().required(),
-        password: yup.string().min(8).required(),
-    });
-    
-    const validateData = () => {
-        dispatch({type: 'reset-errors'});
-        schema.validate({username, password}, { abortEarly: false })
-        .then(() => {
-            apiHelper('post', 'https://api.taiga.io/api/v1/auth', {username, password, type: 'normal'}).then((response) => {
-                console.log(response)
-            })
-        })
-        .catch((err) => {
+  const validateData = () => {
+    dispatch(resetErrors());
+    schema.isValid({ username, password }).then(function (valid) {
+      if (!valid) {
+        schema
+          .validate({ username, password }, { abortEarly: false })
+          .catch((err) => {
             err.inner.forEach((ele) => {
-                dispatch({type: 'field', field: `${ele.path}Error`, value: ele.message});
+              dispatch(setErrors(ele));
             });
-        });
-    }
+          });
+      } else {
+        dispatch(loginRequest({ username, password }));
+      }
+    });
+  };
 
-    return(
-        <LoginComponent
-            validateData={validateData} 
-            state={state}
-            dispatch={dispatch}
-        />
-    )
-}
+  if (userDetails.auth_token) {
+    return <Redirect to="/dashboard" />;
+  }
+
+  return (
+    <LoginComponent
+      validateData={validateData}
+      dispatch={dispatch}
+      usernameError={usernameError}
+      passwordError={passwordError}
+      username={username}
+      password={password}
+    />
+  );
+};
 
 export default LoginContainer;

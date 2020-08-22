@@ -1,0 +1,20 @@
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import LoginContainer from "../containers/LoginContainer";
+import DashboardContainer from "../containers/DashBoardContainer";
+const Routes = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/" exact={true}>
+          <LoginContainer />
+        </Route>
+        <Route path="/dashboard" exact={true}>
+          <DashboardContainer />
+        </Route>
+      </Switch>
+    </Router>
+  );
+};
+
+export default Routes;
