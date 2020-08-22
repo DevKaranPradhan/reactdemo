@@ -1,15 +1,11 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { Redirect } from "react-router-dom";
 
 import LoginComponent from "../components/LoginComponent";
-import apiHelper from "../apis/apiHelper";
-import login from "../apis/loginApi";
-import loginReducer, { initialState } from "../reducers/loginReducer";
-import { LOGIN_REDUCER } from "../shared/actionConstants";
+
 import {
-  setUserDetails,
   loginRequest,
   setErrors,
   resetErrors,

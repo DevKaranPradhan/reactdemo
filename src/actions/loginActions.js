@@ -1,20 +1,4 @@
-// import { LOGIN_REDUCER } from "../shared/actionConstants"
-// import apiHelper from '../apis/apiHelper'
-// import login from "../apis/loginApi"
-
-// export const setUserDetails = data => {
-//     return {
-//         type: LOGIN_REDUCER.SET_USER_DETAILS,
-//         value: data
-//     }
-// }
-
-// export const loginRequest = ({username, password}) => {
-//     return login({username, password})
-// }
-
 import { LOGIN_REDUCER } from "../shared/actionConstants";
-import apiHelper from "../apis/apiHelper";
 
 export const setUserDetails = (data) => {
   return {

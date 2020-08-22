@@ -1,7 +1,5 @@
 import { PROJECT_REDUCER } from "../shared/actionConstants";
 import { takeLatest, call, put } from "redux-saga/effects";
-import { setUserDetails, loginFailed } from "../actions/loginActions";
-import login from "../apis/loginApi";
 import { setProjects } from "../actions/projectActions";
 import getProjectsApi from "../apis/projectApi";
 
